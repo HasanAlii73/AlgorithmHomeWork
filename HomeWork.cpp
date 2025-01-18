@@ -135,6 +135,64 @@ void CheriyanMelhornGabow(int v) {
 }
 
 
+// ====================== 4 ======================
+// Utility function for detecting bridges
+bool hasBridgeUtil(int u, bool visited[], int disc[], int low[], int parent[], int nodes) {
+    static int time = 0;
+
+    visited[u] = true;
+    disc[u] = low[u] = ++time;
+
+    for (int v : adjList[u]) {
+        if (!visited[v]) {
+            parent[v] = u;
+            if (hasBridgeUtil(v, visited, disc, low, parent, nodes))
+                return true;
+
+            low[u] = min(low[u], low[v]);
+
+            if (low[v] > disc[u])
+                return true;
+        } else if (v != parent[u]) {
+            low[u] = min(low[u], disc[v]);
+        }
+    }
+    return false;
+}
+// Function to detect if there are any bridges in the graph
+bool hasBridge(int nodes) {
+    bool *visited = new bool[nodes];
+    int *disc = new int[nodes];
+    int *low = new int[nodes];
+    int *parent = new int[nodes];
+
+    for (int i = 0; i < nodes; i++) {
+        visited[i] = false;
+        parent[i] = -1;
+    }
+
+    for (int i = 0; i < nodes; i++) {
+        if (!visited[i]) {
+            if (hasBridgeUtil(i, visited, disc, low, parent, nodes)) {
+                delete[] visited;
+                delete[] disc;
+                delete[] low;
+                delete[] parent;
+                return true;
+            }
+        }
+    }
+
+    delete[] visited;
+    delete[] disc;
+    delete[] low;
+    delete[] parent;
+
+    return false;
+}
+
+
+// ===============================================
 // Initialize the graph and reset variables
 void initGraph(int nodes) {
     for (int i = 0; i < nodes; ++i) {
