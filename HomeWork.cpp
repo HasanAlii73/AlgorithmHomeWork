@@ -48,7 +48,6 @@ void dfs(int w) {
     state[w] = 1; // active
     dfs_num[w] = dfs_counter++;
     
-    // Explore neighbors
     for (int u : adjList[w]) {
         if (state[u] == 0) {
             dfs(u);
@@ -211,7 +210,7 @@ void initGraph(int nodes) {
     while (!Ostack.empty()) Ostack.pop();
     while (!Rstack.empty()) Rstack.pop();
 }
-// Create a random graph for testing
+// Create a random graph
 void createRandomGraph(int nodes, int edges) {
     srand(time(0));
     initGraph(nodes);
